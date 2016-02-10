@@ -5,6 +5,7 @@ Welcome, I'm Giorgio Desideri. These project is created to collect all pieces / 
 Goals:
 - not requirement dictation only the will to explain and let understand;
 - not the best silver bullet solution, but the "best" meaningfull solution;
+- not copy and paste, but understand and use your brain to create your best solution;
 
 ## Usage
 
