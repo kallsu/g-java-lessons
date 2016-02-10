@@ -117,5 +117,13 @@ public class Writer implements Runnable {
     return name;
   }
 
+  public boolean isRunning() {
+    return running;
+  }
+
+  public void setRunning(boolean running) {
+    this.running = running;
+  }
+
 
 }

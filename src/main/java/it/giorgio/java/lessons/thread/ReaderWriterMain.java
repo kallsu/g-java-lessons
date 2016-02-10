@@ -18,6 +18,8 @@
  */
 package it.giorgio.java.lessons.thread;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,15 +34,38 @@ public class ReaderWriterMain {
    */
   public static void main(String[] args) {
 
-    ExecutorService executor = Executors.newWorkStealingPool(10);
+    List<Runnable> threads = new ArrayList<>(0);
+
+    threads.add(new Writer("Writer #" + 1));
+    threads.add(new Writer("Writer #" + 2));
+    threads.add(new Writer("Writer #" + 3));
+    threads.add(new Writer("Writer #" + 4));
+
+    threads.add(new Reader("Reader #" + 1));
+    threads.add(new Reader("Reader #" + 2));
+    threads.add(new Reader("Reader #" + 3));
+    threads.add(new Reader("Reader #" + 4));
+    threads.add(new Reader("Reader #" + 5));
+
+    ExecutorService executor = Executors.newWorkStealingPool(threads.size());
 
     // init writer
-    for (int i = 0; i < 5; i++) {
-      executor.submit(new Writer("Writer #" + i));
-      executor.submit(new Reader("Reader #" + i));
+    for (Runnable t : threads) {
+      executor.submit(t);
     }
 
-    // write code to handle the stop of threads.
+    // wait a condition and decide to stop all thread
+    // if (condition == true) {
+    // // stop all thread
+    // for (Runnable t : threads) {
+    // if (t instanceof Writer) {
+    // ((Writer) t).setRunning(false);
+    // }
+    // else {
+    // ((Reader) t).setRunning(false);
+    // }
+    // }
+    // }
 
     // wait executor
     while (!executor.isTerminated()) {
