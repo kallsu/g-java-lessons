@@ -16,36 +16,46 @@
  * License.
  * 
  */
-package it.giorgio.java.lessons.thread;
+package it.giorgio.java.lessons.test.concurrency1;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.junit.Before;
+import org.junit.Test;
+
+import it.giorgio.java.lessons.concurrency1.Reader;
+import it.giorgio.java.lessons.concurrency1.Writer;
+
 /**
  * @author Giorgio Desideri <giorgio.desideri@gmail.com>
  *
  */
-public class ReaderWriterMain {
+public class ReaderWriterTest {
 
-  /*
-   * Main method
-   */
-  public static void main(String[] args) {
+  List<Runnable> threads = null;
 
-    List<Runnable> threads = new ArrayList<>(0);
+  @Before
+  public void setUp() {
+    threads = new ArrayList<>(0);
 
     threads.add(new Writer("Writer #" + 1));
     threads.add(new Writer("Writer #" + 2));
     threads.add(new Writer("Writer #" + 3));
     threads.add(new Writer("Writer #" + 4));
+    threads.add(new Writer("Writer #" + 5));
 
     threads.add(new Reader("Reader #" + 1));
     threads.add(new Reader("Reader #" + 2));
     threads.add(new Reader("Reader #" + 3));
     threads.add(new Reader("Reader #" + 4));
     threads.add(new Reader("Reader #" + 5));
+  }
+
+  @Test
+  public void testRun() {
 
     ExecutorService executor = Executors.newWorkStealingPool(threads.size());
 
@@ -71,7 +81,6 @@ public class ReaderWriterMain {
     while (!executor.isTerminated()) {
       executor.shutdown();
     }
-
   }
 
 }

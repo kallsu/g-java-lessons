@@ -16,11 +16,13 @@
  * License.
  * 
  */
-package it.giorgio.java.lessons.thread;
+package it.giorgio.java.lessons.concurrency1;
+
+import java.security.SecureRandom;
 
 /**
- * This class represents the 'consumer' object that is in concurrency with 'producer' objects.
- * Reader object reads the object inside storage queue and remove them from queue.
+ * This class represents the 'producer' object that is in concurrency with 'consumer' objects.
+ * Writer object add objects inside storage queue.
  * 
  * In this scenario consumers ares reader object instances, producers are the writer object
  * instances.
@@ -28,7 +30,7 @@ package it.giorgio.java.lessons.thread;
  * @author Giorgio Desideri <giorgio.desideri@gmail.com>
  *
  */
-public class Reader implements Runnable {
+public class Writer implements Runnable {
 
   private StatusEnum state = StatusEnum.SLEEP;
 
@@ -39,14 +41,13 @@ public class Reader implements Runnable {
   private boolean running = false;
 
   /**
-   * Instantiates a new reader.
+   * Instantiates a new writer.
    *
-   * @param name the name of reader
+   * @param name the name of writer
    */
-  public Reader(String name) {
+  public Writer(String name) {
     this.name = name;
 
-    // go baby go !
     running = true;
   }
 
@@ -57,30 +58,37 @@ public class Reader implements Runnable {
    */
   @Override
   public void run() {
-    // put state in run
+
     state = StatusEnum.RUNNING;
 
     System.out.println(name + ". START");
+
+    SecureRandom sr = new SecureRandom();
+    int min = 1;
+    int max = 100000;
 
     // loop until controller / manager of thread say to stop !
     while (running) {
 
       // 2nd check
-      while (!storage.isQueueEmpty()) {
+      while (!storage.isQueueFull()) {
 
         state = StatusEnum.RUNNING;
 
-        // remove object
-        Object obj = storage.remove();
+        // create object
+        Object obj = "Book " + (sr.nextInt(max) - min);
 
-        // use object
-        System.out.println(name + ". Read book: " + obj.toString());
+        // add object
+        storage.add(obj);
+
+        System.out.println(name + ". Add Book: " + obj.toString());
       }
 
       // go in wait
-      waitReader();
+      waitWriter();
     }
 
+    // put state in sleep
     state = StatusEnum.SLEEP;
 
     System.out.println(name + ". END");
@@ -89,10 +97,11 @@ public class Reader implements Runnable {
   /**
    * Send Writer instance in wait status
    */
-  public void waitReader() {
+  public void waitWriter() {
+    state = StatusEnum.WAIT;
 
     try {
-      state = StatusEnum.WAIT;
+      System.out.println(name + ". SLEEP");
       Thread.sleep(Storage.SLEEP_TIME);
     }
     catch (InterruptedException e) {
@@ -115,5 +124,6 @@ public class Reader implements Runnable {
   public void setRunning(boolean running) {
     this.running = running;
   }
+
 
 }

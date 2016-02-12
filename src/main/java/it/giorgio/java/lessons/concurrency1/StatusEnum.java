@@ -16,7 +16,7 @@
  * License.
  * 
  */
-package it.giorgio.java.lessons.thread;
+package it.giorgio.java.lessons.concurrency1;
 
 /**
  * Enumeration to explain the status of reader or writer.

@@ -16,7 +16,7 @@
  * License.
  * 
  */
-package it.giorgio.java.lessons.thread;
+package it.giorgio.java.lessons.concurrency1;
 
 import java.util.LinkedList;
 import java.util.Queue;
